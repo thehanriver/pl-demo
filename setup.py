@@ -6,7 +6,7 @@ with open(path.join(path.dirname(path.abspath(__file__)), 'README.rst')) as f:
 
 setup(
     name             = 'demo',
-    version          = '0.0.`',
+    version          = '0.0.1',
     description      = 'demo',
     long_description = readme,
     author           = 'mario',
