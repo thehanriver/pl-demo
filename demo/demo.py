@@ -9,7 +9,8 @@
 #
 
 from chrisapp.base import ChrisApp
-
+import numpy as np
+from PIL import Image
 
 Gstr_title = """
      _                      
@@ -120,17 +121,55 @@ class Demo(ChrisApp):
         """
         Define the CLI arguments accepted by this plugin app.
         Use self.add_argument to specify a new app argument.
+        
+        Random:
+                self.add_argument('--imagefile',
+        	dest		= 'imagefile',
+        	type		= str,
+        	optional	= False,
+        	help		= 'Name of Image File')
         """
 
+	
+             
     def run(self, options):
         """
         Define the code to be run by this plugin app.
+        
+        Just random stuff:
+        im = Image.open('{}/'+(options.imagefile).format(options.inputdir))
+         file.writelines('hello\n')
         """
+        
         print(Gstr_title)
         print('Version: %s' % self.get_version())
+        
+        arr = np.array([])
+        
+        with open('{}/rando.txt'.format(options.inputdir)) as file:
+        	for each in file:
+        		each = each.rstrip("\n")
+        		each = int(each)
+        		arr = np.append(arr,each)
+        file.close()
+        
+        arr = np.sort(arr)
+        print(arr)
+        
+        file = open('{}/sorted.txt'.format(options.outputdir),'w')
+        file.write('Ran Successfully \n')
+        np.savetxt(file,arr,fmt ='% 4d')
+        
+
+       
+        file.flush()
+        file.close()
+        
+        print('Sorted')        
 
     def show_man_page(self):
         """
         Print the app's man page.
         """
+        print(Gstr_title)
         print(Gstr_synopsis)
