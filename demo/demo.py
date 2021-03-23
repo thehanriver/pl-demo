@@ -129,6 +129,11 @@ class Demo(ChrisApp):
         	optional	= False,
         	help		= 'Name of Image File')
         """
+        self.add_argument('--inputfile',
+        	dest	= 'inputfile',
+        	type	= str,
+        	optional	= False,
+        	help = 'input file')
 
 	
              
@@ -146,7 +151,7 @@ class Demo(ChrisApp):
         
         arr = np.array([])
         
-        with open('{}/rando.txt'.format(options.inputdir)) as file:
+        with open(f"{options.inputdir}/{options.inputfile}") as file:
         	for each in file:
         		each = each.rstrip("\n")
         		each = int(each)
