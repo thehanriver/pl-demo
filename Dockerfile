@@ -20,4 +20,4 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN pip install .
 
-CMD ["covidnet", "--help"]
+CMD ["demo", "--help"]
