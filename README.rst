@@ -88,7 +88,7 @@ You need you need to specify input and output directories using the `-v` flag to
 
     docker run --rm -u $(id -u)                             \
         -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing      \
-        local/pl-demo demo                      	      \
+        local/pl-demo demo.py  --imagefile PatientA.jpeg      \
         /incoming /outgoing
 Development
 -----------

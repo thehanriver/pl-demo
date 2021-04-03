@@ -8,13 +8,10 @@
 #                        dev@babyMRI.org
 #
 
-import os
-import sys
-
-from .inference import Inference
-
-# import the Chris app superclass
 from chrisapp.base import ChrisApp
+import numpy as np
+from PIL import Image
+
 Gstr_title = """
      _                      
     | |                     
@@ -94,7 +91,7 @@ class Demo(ChrisApp):
     demo
     """
     PACKAGE                 = __package__
-    TITLE                   = 'COVID-Net inference for chest x-ray'
+    TITLE                   = 'demo app'
     CATEGORY                = ''
     TYPE                    = 'ds'
     ICON                    = '' # url of an icon image
@@ -132,41 +129,12 @@ class Demo(ChrisApp):
         	optional	= False,
         	help		= 'Name of Image File')
         """
-        self.add_argument('--metaname', 
-                    dest         = 'metaname', 
-                    type         = str, 
-                    optional     = True,
-                    help         = 'Name of ckpt meta file',
-                    default      = 'model.meta')
-        self.add_argument('--imagefile', 
-                    dest         = 'imagefile', 
-                    type         = str, 
-                    optional     = False,
-                    help         = 'Name of image file to infer from')
-        self.add_argument('--in_tensorname', 
-                    dest         = 'in_tensorname', 
-                    type         = str, 
-                    optional     = True,
-                    help         = 'Name of input tensor to graph',
-                    default      = 'input_1:0')
-        self.add_argument('--out_tensorname', 
-                    dest         = 'out_tensorname', 
-                    type         = str, 
-                    optional     = True,
-                    help         = 'Name of output tensor from graph',
-                    default      = 'norm_dense_1/Softmax:0')
-        self.add_argument('--input_size', 
-                    dest         = 'input_size', 
-                    type         = int, 
-                    optional     = True,
-                    help         = 'Size of input (ex: if 480x480, --input_size 480)',
-                    default      = 480)
-        self.add_argument('--top_percent', 
-                    dest         = 'top_percent', 
-                    type         = float, 
-                    optional     = True,
-                    help         = 'Percent top crop from top of image',
-                    default      = 0.08)
+        self.add_argument('--inputfile',
+        	dest	= 'inputfile',
+        	type	= str,
+        	optional	= False,
+        	help = 'input file')
+
 	
              
     def run(self, options):
@@ -178,39 +146,35 @@ class Demo(ChrisApp):
          file.writelines('hello\n')
         """
         
-       # python covidnet.py inputimage output --imagefile ex-covid.jpeg
         print(Gstr_title)
         print('Version: %s' % self.get_version())
-        all_three_models = [
-            # {
-            #     'weightspath':'/models/COVIDNet-CXR3-A',
-            #     'ckptname':'model-2856',
-            #     'modelused':'modelA'
-            # }, 
-            {
-                'weightspath':'/usr/local/lib/covidnet/COVIDNet-CXR4-B',
-                'ckptname':'model-1545',
-                'modelused':'modelB'
-            },
-            # {
-            #     'weightspath': '/models/COVIDNet-CXR3-C',
-            #     'ckptname':'model-0',
-            #     'modelused':'modelC'
-            # }
-        ]
-        for model in all_three_models:
-            options.weightspath =model['weightspath']
-            options.ckptname = model['ckptname']
-            options.modelused = model['modelused']
-            infer_obj = Inference(options)
-            infer_obj.infer()
+        
+        arr = np.array([])
+        
+        with open(f"{options.inputdir}/{options.inputfile}") as file:
+        	for each in file:
+        		each = each.rstrip("\n")
+        		each = int(each)
+        		arr = np.append(arr,each)
+        file.close()
+        
+        arr = np.sort(arr)
+        print(arr)
+        
+        file = open('{}/sorted.txt'.format(options.outputdir),'w')
+        file.write('Ran Successfully \n')
+        np.savetxt(file,arr,fmt ='% 4d')
+        
+
+       
+        file.flush()
+        file.close()
+        
+        print('Sorted')        
+
     def show_man_page(self):
         """
         Print the app's man page.
         """
         print(Gstr_title)
         print(Gstr_synopsis)
-
-# chris app needs to write to files as outputs and taking inputs
-# output a dicom image then ChRIS user interface will be able to show it
-# csv, json, or custom html css files
