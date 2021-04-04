@@ -88,8 +88,13 @@ You need you need to specify input and output directories using the `-v` flag to
 
     docker run --rm -u $(id -u)                             \
         -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing      \
-        local/pl-demo demo.py  --imagefile PatientA.jpeg      \
+        local/pl-demo demo  --imagefile PatientA.jpeg      \
         /incoming /outgoing
+
+    docker run --rm -u $(id -u) -v $(pwd)/sevstack:/usr/local/lib/python3.9/site-packages/sevstack:ro -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing thehanriver/pl-demo demo --imagefile PatientA.jpeg --parInst 14 /incoming /outgoing
+
+        docker run --rm -u $(id -u) -v $(pwd)/in:/incoming -v $(pwd)/out:/outgoing thehanriver/pl-demo demo --imagefile PatientA.jpeg --parInst 14 /incoming /outgoing
+
 Development
 -----------
 
