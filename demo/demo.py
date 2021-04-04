@@ -132,6 +132,13 @@ class Demo(ChrisApp):
         	optional	= False,
         	help		= 'Name of Image File')
         """
+        self.add_argument('--parInst',
+        	dest = 'parInst',
+        	type = str,
+        	optional = False,
+        	help = 'Parent instance ID',
+        	)
+        	
         self.add_argument('--metaname', 
                     dest         = 'metaname', 
                     type         = str, 
@@ -167,6 +174,7 @@ class Demo(ChrisApp):
                     optional     = True,
                     help         = 'Percent top crop from top of image',
                     default      = 0.08)
+                    
 	
              
     def run(self, options):
